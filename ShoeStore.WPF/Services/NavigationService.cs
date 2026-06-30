@@ -46,7 +46,13 @@ public class NavigationService : INavigationService
 
     public void CloseCurrentWindow()
     {
-        if (_windowStack.TryPop(out var window))
-            window.Close();
+        if (_windowStack.Count > 1)
+        {
+            var windows = _windowStack.ToArray();
+            var previousWindow = windows[1];
+            var currentWindow = _windowStack.Pop();
+
+            previousWindow.Close();
+        }
     }
 }

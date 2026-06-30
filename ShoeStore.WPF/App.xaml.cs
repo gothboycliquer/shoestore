@@ -26,6 +26,8 @@ public partial class App : Application
         _serviceProvider = services.BuildServiceProvider();
 
         var loginView = _serviceProvider.GetRequiredService<LoginView>();
+        var loginViewModel = _serviceProvider.GetRequiredService<LoginViewModel>();
+        loginView.DataContext = loginViewModel;
         loginView.Show();
     }
 
