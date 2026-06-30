@@ -1,5 +1,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:ShoeStore.WPF.Converters">
+
+    <converters:DiscountToBackgroundConverter x:Key="DiscountToBackgroundConverter"/>
+    <converters:StockToBackgroundConverter x:Key="StockToBackgroundConverter"/>
+    <converters:PriceWithDiscountConverter x:Key="PriceWithDiscountConverter"/>
+    <converters:DiscountVisibilityConverter x:Key="DiscountVisibilityConverter"/>
+    <converters:NullToPlaceholderConverter x:Key="NullToPlaceholderConverter"/>
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
     <Color x:Key="PrimaryColor">#2C3E50</Color>
     <Color x:Key="AccentColor">#3498DB</Color>

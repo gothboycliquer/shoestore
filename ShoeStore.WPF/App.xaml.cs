@@ -16,6 +16,12 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        DispatcherUnhandledException += (s, ex) =>
+        {
+            MessageBox.Show($"Критическая ошибка: {ex.Exception.Message}\n\n{ex.Exception.StackTrace}");
+            ex.Handled = true;
+        };
+
         var configuration = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -25,9 +31,10 @@ public partial class App : Application
         ConfigureServices(services, configuration);
         _serviceProvider = services.BuildServiceProvider();
 
-        var loginView = _serviceProvider.GetRequiredService<LoginView>();
         var loginViewModel = _serviceProvider.GetRequiredService<LoginViewModel>();
+        var loginView = new LoginView();
         loginView.DataContext = loginViewModel;
+        loginViewModel.CloseAction = () => loginView.Close();
         loginView.Show();
     }
 
@@ -44,12 +51,7 @@ public partial class App : Application
             new NavigationService(provider));
 
         services.AddTransient<LoginViewModel>();
-        services.AddTransient<MainViewModel>();
         services.AddTransient<ProductListViewModel>();
-
-        services.AddTransient<LoginView>();
-        services.AddTransient<MainView>();
-        services.AddTransient<ProductListView>();
     }
 
     protected override void OnExit(ExitEventArgs e)
