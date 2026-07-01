@@ -77,6 +77,7 @@ public class ProductListViewModel : BaseViewModel
     public RelayCommand AddProductCommand { get; }
     public RelayCommand EditProductCommand { get; }
     public AsyncRelayCommand DeleteProductCommand { get; }
+    public RelayCommand ShowOrdersCommand { get; }
 
     public ProductListViewModel(IApiClient apiClient, ISessionService sessionService, INavigationService navigationService)
     {
@@ -93,6 +94,7 @@ public class ProductListViewModel : BaseViewModel
         AddProductCommand = new RelayCommand(_ => AddProduct());
         EditProductCommand = new RelayCommand(p => EditProduct(p as ProductDto));
         DeleteProductCommand = new AsyncRelayCommand(p => DeleteProductAsync(p as ProductDto));
+        ShowOrdersCommand = new RelayCommand(_ => ShowOrders());
     }
 
     public async Task InitializeAsync()
@@ -185,6 +187,8 @@ public class ProductListViewModel : BaseViewModel
     window.ShowDialog();
 }
 
+
+
 private async void EditProduct(ProductDto? product)
 {
     if (product == null) return;
@@ -241,5 +245,18 @@ private void Logout()
             if (window is not Views.LoginView)
                 window.Close();
         }
+    }
+private void ShowOrders()
+    {
+        var vm = new OrderListViewModel(_apiClient, _sessionService, _navigationService);
+        var window = new Views.OrderListView();
+        window.DataContext = vm;
+
+        var currentWindow = Application.Current.Windows
+        .OfType<Window>()
+        .FirstOrDefault(w => w.IsActive);
+
+        window.Show();
+        currentWindow?.Hide();
     }
 }
