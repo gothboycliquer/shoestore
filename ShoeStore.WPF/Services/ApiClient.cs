@@ -30,16 +30,18 @@ public class ApiClient : IApiClient
     }
 
     public async Task<T?> PostAsync<T>(string endpoint, object data)
-    {
-        var json = JsonSerializer.Serialize(data);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+{
+    var json = JsonSerializer.Serialize(data);
+    var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync(endpoint, content);
-        response.EnsureSuccessStatusCode();
+    var response = await _httpClient.PostAsync(endpoint, content);
+    var responseJson = await response.Content.ReadAsStringAsync();
 
-        var responseJson = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(responseJson, _jsonOptions);
-    }
+    if (!response.IsSuccessStatusCode)
+        throw new Exception($"Ошибка {(int)response.StatusCode}: {responseJson}");
+
+    return JsonSerializer.Deserialize<T>(responseJson, _jsonOptions);
+}
 
     public async Task<T?> PutAsync<T>(string endpoint, object data)
     {

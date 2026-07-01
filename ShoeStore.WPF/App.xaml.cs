@@ -4,6 +4,7 @@ using ShoeStore.WPF.Services;
 using ShoeStore.WPF.Services.Interfaces;
 using ShoeStore.WPF.ViewModels;
 using ShoeStore.WPF.Views;
+using System.Net.Http;
 using System.Windows;
 
 namespace ShoeStore.WPF;
@@ -39,20 +40,24 @@ public partial class App : Application
     }
 
     private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+{
+    var baseUrl = configuration["ApiSettings:BaseUrl"]!;
+
+    services.AddSingleton<HttpClient>(provider =>
     {
-        var baseUrl = configuration["ApiSettings:BaseUrl"]!;
-        services.AddHttpClient<IApiClient, ApiClient>(client =>
-        {
-            client.BaseAddress = new Uri(baseUrl);
-        });
+        return new HttpClient { BaseAddress = new Uri(baseUrl) };
+    });
 
-        services.AddSingleton<ISessionService, SessionService>();
-        services.AddSingleton<INavigationService, NavigationService>(provider =>
-            new NavigationService(provider));
+    services.AddSingleton<IApiClient, ApiClient>();
 
-        services.AddTransient<LoginViewModel>();
-        services.AddTransient<ProductListViewModel>();
-    }
+    services.AddSingleton<ISessionService, SessionService>();
+    services.AddSingleton<INavigationService, NavigationService>(provider =>
+        new NavigationService(provider));
+
+    services.AddTransient<LoginViewModel>();
+    services.AddTransient<ProductListViewModel>();
+    services.AddTransient<ProductEditViewModel>();
+}
 
     protected override void OnExit(ExitEventArgs e)
     {

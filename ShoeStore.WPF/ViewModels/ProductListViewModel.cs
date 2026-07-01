@@ -174,43 +174,61 @@ public class ProductListViewModel : BaseViewModel
         ProductsView.SortDescriptions.Add(new SortDescription("Quantity", sortDir));
     }
 
-    private void AddProduct()
-    {
-        MessageBox.Show("Добавление товара — будет реализовано на следующем этапе.");
-    }
+    private async void AddProduct()
+{
+    var vm = new ProductEditViewModel(_apiClient);
+    var window = new Views.ProductEditView();
+    window.DataContext = vm;
+    vm.CloseAction = () => window.Close();
+    vm.OnSavedAction = async () => await LoadDataAsync(null);
+    await vm.InitializeAsync();
+    window.ShowDialog();
+}
 
-    private void EditProduct(ProductDto? product)
-    {
-        if (product == null) return;
-        MessageBox.Show($"Редактирование товара: {product.Name} — будет реализовано на следующем этапе.");
-    }
+private async void EditProduct(ProductDto? product)
+{
+    if (product == null) return;
+
+    var vm = new ProductEditViewModel(_apiClient);
+    var window = new Views.ProductEditView();
+    window.DataContext = vm;
+    vm.CloseAction = () => window.Close();
+    vm.OnSavedAction = async () => await LoadDataAsync(null);
+    await vm.InitializeAsync(product);
+    window.ShowDialog();
+}
 
     private async Task DeleteProductAsync(object? parameter)
+{
+    if (parameter is not ProductDto product) return;
+
+    var result = MessageBox.Show(
+        $"Удалить товар '{product.Name}'?",
+        "Подтверждение",
+        MessageBoxButton.YesNo,
+        MessageBoxImage.Warning);
+
+    if (result != MessageBoxResult.Yes) return;
+
+    try
     {
-        if (parameter is not ProductDto product) return;
-
-        var result = MessageBox.Show(
-            $"Удалить товар '{product.Name}'?",
-            "Подтверждение",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
-
-        if (result != MessageBoxResult.Yes) return;
-
-        try
+        var success = await _apiClient.DeleteAsync($"api/products/{product.Id}");
+        if (success)
         {
-            var success = await _apiClient.DeleteAsync($"api/products/{product.Id}");
-            if (success)
-            {
-                _products.Remove(product);
-                MessageBox.Show("Товар успешно удалён.");
-            }
+            _products.Remove(product);
+            ProductsView.Refresh();
+            MessageBox.Show("Товар успешно удалён.");
         }
-        catch (Exception ex)
+        else
         {
-            MessageBox.Show($"Ошибка удаления: {ex.Message}");
+            MessageBox.Show("Не удалось удалить товар.");
         }
     }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Ошибка удаления: {ex.Message}");
+    }
+}
 
 private void Logout()
     {

@@ -52,12 +52,12 @@ public class AuthService : IAuthService
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Login),
-            new Claim(ClaimTypes.Role, user.Role.Name),
-            new Claim("FullName", user.FullName)
-        };
+{
+    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+    new Claim(ClaimTypes.Name, user.Login),
+    new Claim("role", user.Role.Name.Trim()),
+    new Claim("FullName", user.FullName)
+};
 
         var token = new JwtSecurityToken(
             issuer: issuer,

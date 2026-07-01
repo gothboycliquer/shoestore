@@ -192,13 +192,14 @@
                                         <TextBlock Text="{Binding Unit}" FontSize="12"/>
                                     </StackPanel>
 
-                                    <TextBlock Visibility="{Binding Discount, Converter={StaticResource DiscountVisibilityConverter}}"
-                                               Foreground="Green"
-                                               FontSize="12">
-                                        <Run Text="Скидка: "/>
-                                        <Run Text="{Binding Discount}"/>
-                                        <Run Text="%"/>
-                                    </TextBlock>
+                                    <TextBlock Foreground="Green"
+           FontSize="12">
+    <TextBlock.Visibility>
+        <Binding Path="Discount" Converter="{StaticResource DiscountVisibilityConverter}"/>
+    </TextBlock.Visibility>
+    <Run Text="Скидка: "/>
+    <Run Text="{Binding Discount, StringFormat={}{0}%}"/>
+</TextBlock>
 
                                     
                                     <StackPanel Orientation="Horizontal"
