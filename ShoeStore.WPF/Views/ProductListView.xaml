@@ -4,6 +4,7 @@
         Title="Магазин обуви — Список товаров"
         Height="700" Width="1100"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
         Loaded="Window_Loaded">
 
     <Grid Background="{StaticResource BackgroundBrush}">

@@ -17,9 +17,14 @@ public class ManufacturerConfiguration : IEntityTypeConfiguration<Manufacturer>
         builder.HasData(
             new Manufacturer { Id = 1, Name = "Nike" },
             new Manufacturer { Id = 2, Name = "Adidas" },
-            new Manufacturer { Id = 3, Name = "Puma" },
-            new Manufacturer { Id = 4, Name = "Reebok" },
-            new Manufacturer { Id = 5, Name = "New Balance" }
+            new Manufacturer { Id = 3, Name = "Balenciaga" },
+            new Manufacturer { Id = 4, Name = "New Rock" },
+            new Manufacturer { Id = 5, Name = "Buffalo" },
+            new Manufacturer { Id = 6, Name = "Puma" },
+            new Manufacturer { Id = 7, Name = "Reebok" },
+            new Manufacturer { Id = 8, Name = "New Balance" },
+            new Manufacturer { Id = 9, Name = "Dr. Martens" },
+            new Manufacturer { Id = 10, Name = "Converse" }
         );
     }
 }

@@ -86,75 +86,51 @@ public static class DatabaseSeeder
             },
             new Product
             {
-                Name = "Puma Suede Classic",
-                Description = "Легендарные замшевые кроссовки в городском стиле.",
-                Price = 6500,
+                Name = "Balenciaga Track",
+                Description = "Массивные кроссовки с многослойной подошвой в стиле dad shoes.",
+                Price = 89000,
                 Unit = "пара",
-                Quantity = 20,
-                Discount = 20,
-                CategoryId = 1,
-                ManufacturerId = 3,
-                SupplierId = 1
-            },
-            new Product
-            {
-                Name = "Nike Air Force 1",
-                Description = "Иконические кроссовки на каждый день.",
-                Price = 9500,
-                Unit = "пара",
-                Quantity = 0,
+                Quantity = 3,
                 Discount = 0,
                 CategoryId = 1,
-                ManufacturerId = 1,
+                ManufacturerId = 3,
                 SupplierId = 3
             },
             new Product
             {
-                Name = "Adidas Stan Smith",
-                Description = "Минималистичные кожаные кроссовки с перфорацией.",
-                Price = 7200,
+                Name = "New Rock M.WALL083",
+                Description = "Культовые ботинки в готическом стиле с массивной подошвой и металлическими деталями.",
+                Price = 24500,
                 Unit = "пара",
                 Quantity = 5,
-                Discount = 5,
+                Discount = 0,
+                CategoryId = 4,
+                ManufacturerId = 4,
+                SupplierId = 1
+            },
+            new Product
+            {
+                Name = "Buffalo 1339-14",
+                Description = "Легендарные платформенные кроссовки 90-х с массивной подошвой.",
+                Price = 18900,
+                Unit = "пара",
+                Quantity = 4,
+                Discount = 15,
                 CategoryId = 1,
-                ManufacturerId = 2,
+                ManufacturerId = 5,
                 SupplierId = 2
             },
             new Product
             {
-                Name = "Reebok Classic Leather",
-                Description = "Культовые кожаные кроссовки для повседневной носки.",
-                Price = 5800,
-                Unit = "пара",
-                Quantity = 12,
-                Discount = 0,
-                CategoryId = 1,
-                ManufacturerId = 4,
-                SupplierId = 3
-            },
-            new Product
-            {
-                Name = "New Balance 574",
-                Description = "Удобные кроссовки с замшевыми вставками.",
-                Price = 7900,
-                Unit = "пара",
-                Quantity = 3,
-                Discount = 15,
-                CategoryId = 1,
-                ManufacturerId = 5,
-                SupplierId = 1
-            },
-            new Product
-            {
-                Name = "Nike Air Jordan 1",
-                Description = "Баскетбольные кроссовки ставшие иконой уличной моды.",
+                Name = "Nike Air Jordan 1 Retro",
+                Description = "Культовые баскетбольные кроссовки ставшие иконой уличной моды.",
                 Price = 15000,
                 Unit = "пара",
                 Quantity = 6,
                 Discount = 0,
                 CategoryId = 1,
                 ManufacturerId = 1,
-                SupplierId = 2
+                SupplierId = 3
             },
             new Product
             {
@@ -166,22 +142,69 @@ public static class DatabaseSeeder
                 Discount = 0,
                 CategoryId = 1,
                 ManufacturerId = 2,
+                SupplierId = 1
+            },
+            new Product
+            {
+                Name = "Puma Suede Classic",
+                Description = "Легендарные замшевые кроссовки в городском стиле.",
+                Price = 6500,
+                Unit = "пара",
+                Quantity = 20,
+                Discount = 20,
+                CategoryId = 1,
+                ManufacturerId = 6,
+                SupplierId = 2
+            },
+            new Product
+            {
+                Name = "Reebok Classic Leather",
+                Description = "Культовые кожаные кроссовки для повседневной носки.",
+                Price = 5800,
+                Unit = "пара",
+                Quantity = 12,
+                Discount = 0,
+                CategoryId = 1,
+                ManufacturerId = 7,
                 SupplierId = 3
             },
             new Product
             {
-                Name = "Puma RS-X",
-                Description = "Объёмные кроссовки в стиле ретро-футуризм.",
-                Price = 7100,
+                Name = "New Balance 574",
+                Description = "Удобные кроссовки с замшевыми вставками.",
+                Price = 7900,
                 Unit = "пара",
-                Quantity = 9,
+                Quantity = 3,
                 Discount = 18,
                 CategoryId = 1,
-                ManufacturerId = 3,
+                ManufacturerId = 8,
                 SupplierId = 1
+            },
+            new Product
+            {
+                Name = "Dr. Martens 1460",
+                Description = "Классические ботинки на шнуровке с фирменной желтой строчкой.",
+                Price = 16500,
+                Unit = "пара",
+                Quantity = 9,
+                Discount = 5,
+                CategoryId = 4,
+                ManufacturerId = 9,
+                SupplierId = 2
+            },
+            new Product
+            {
+                Name = "Converse Chuck Taylor All Star",
+                Description = "Парусиновые кеды ставшие символом целого поколения.",
+                Price = 4900,
+                Unit = "пара",
+                Quantity = 25,
+                Discount = 0,
+                CategoryId = 1,
+                ManufacturerId = 10,
+                SupplierId = 3
             }
         };
-
         await context.Products.AddRangeAsync(products);
     }
 }

@@ -4,6 +4,7 @@
         Title="Список заказов"
         Height="700" Width="900"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
         Loaded="Window_Loaded">
 
     <Grid Background="{StaticResource BackgroundBrush}">
