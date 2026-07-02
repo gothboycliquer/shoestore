@@ -1,4 +1,3 @@
-using ShoeStore.Shared.Constants;
 using ShoeStore.WPF.Services.Interfaces;
 
 namespace ShoeStore.WPF.Services;
@@ -15,7 +14,7 @@ public class SessionService : ISessionService
     public string Role => _role;
     public int UserId => _userId;
     public bool IsAuthenticated => !string.IsNullOrEmpty(_token);
-    public bool IsGuest => _role == AppConstants.GuestRole;
+    public bool IsGuest => _role == "Гость";
 
     public void SetSession(string token, string fullName, string role, int userId)
     {
@@ -33,7 +32,7 @@ public class SessionService : ISessionService
         _userId = 0;
     }
 
-    public bool IsAdmin() => _role == AppConstants.AdminRole;
-    public bool IsManager() => _role == AppConstants.ManagerRole || IsAdmin();
-    public bool IsClient() => _role == AppConstants.ClientRole;
+    public bool IsAdmin() => _role == "Администратор";
+    public bool IsManager() => _role == "Менеджер" || IsAdmin();
+    public bool IsClient() => _role == "Клиент";
 }

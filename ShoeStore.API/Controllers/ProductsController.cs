@@ -35,16 +35,21 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
-    public async Task<ActionResult<ApiResponse<ProductDto>>> Create([FromBody] CreateProductDto dto)
+[Authorize(Policy = "AdminOnly")]
+public async Task<ActionResult<ApiResponse<ProductDto>>> Create([FromBody] CreateProductDto dto)
     {
+        var claims = string.Join(" | ", User.Claims.Select(c => $"{c.Type}={c.Value}"));
+        Console.WriteLine($"=== CLAIMS: {claims} ===");
+        Console.WriteLine($"=== IsInRole Admin: {User.IsInRole("Admin")} ===");
+        Console.WriteLine($"=== Identity: {User.Identity?.IsAuthenticated} ===");
+
         var product = await _productService.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = product.Id },
             ApiResponse<ProductDto>.Ok(product, "Товар успешно создан."));
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<ApiResponse<ProductDto>>> Update(int id, [FromBody] UpdateProductDto dto)
     {
         var product = await _productService.UpdateAsync(id, dto);
@@ -55,7 +60,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<ApiResponse<bool>>> Delete(int id)
     {
         var result = await _productService.DeleteAsync(id);

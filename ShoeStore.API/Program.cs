@@ -49,20 +49,39 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
-{
-    ValidateIssuer = true,
-    ValidateAudience = true,
-    ValidateLifetime = true,
-    ValidateIssuerSigningKey = true,
-    ValidIssuer = jwtSettings["Issuer"],
-    ValidAudience = jwtSettings["Audience"],
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-    RoleClaimType = "role",
-    NameClaimType = ClaimTypes.Name
-};
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                var claims = string.Join(" | ", context.Principal!.Claims.Select(c => $"{c.Type}={c.Value}"));
+                Console.WriteLine($"=== TOKEN VALIDATED. CLAIMS: {claims} ===");
+                return Task.CompletedTask;
+            },
+            OnForbidden = context =>
+            {
+                Console.WriteLine("=== FORBIDDEN ===");
+                return Task.CompletedTask;
+            }
+        };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin"));
+    options.AddPolicy("ManagerOrAdmin", policy =>
+        policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Manager", "Admin"));
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

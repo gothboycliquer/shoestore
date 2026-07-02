@@ -29,6 +29,16 @@ public class ProductEditViewModel : BaseViewModel
     private ManufacturerDto? _selectedManufacturer;
     private SupplierDto? _selectedSupplier;
     private bool _isEditMode;
+    private int _originalCategoryId;
+    private int _originalManufacturerId;
+    private int _originalSupplierId;
+    private string _originalName = string.Empty;
+    private string _originalDescription = string.Empty;
+    private decimal _originalPrice;
+    private string _originalUnit = string.Empty;
+    private int _originalQuantity;
+    private decimal _originalDiscount;
+    private string? _originalImagePath;
 
     public int Id
     {
@@ -145,6 +155,17 @@ public class ProductEditViewModel : BaseViewModel
             SelectedCategory = Categories.FirstOrDefault(c => c.Id == product.CategoryId);
             SelectedManufacturer = Manufacturers.FirstOrDefault(m => m.Id == product.ManufacturerId);
             SelectedSupplier = Suppliers.FirstOrDefault(s => s.Id == product.SupplierId);
+
+            _originalName = product.Name;
+            _originalDescription = product.Description;
+            _originalPrice = product.Price;
+            _originalUnit = product.Unit;
+            _originalQuantity = product.Quantity;
+            _originalDiscount = product.Discount;
+            _originalImagePath = product.ImagePath;
+            _originalCategoryId = product.CategoryId;
+            _originalManufacturerId = product.ManufacturerId;
+            _originalSupplierId = product.SupplierId;
         }
         else
         {
@@ -260,7 +281,28 @@ public class ProductEditViewModel : BaseViewModel
         try
         {
             if (IsEditMode)
-            {
+{
+                bool hasChanges =
+                    Name != _originalName ||
+                    Description != _originalDescription ||
+                    Price != _originalPrice ||
+                    Unit != _originalUnit ||
+                    Quantity != _originalQuantity ||
+                    Discount != _originalDiscount ||
+                    ImagePath != _originalImagePath ||
+                    SelectedCategory?.Id != _originalCategoryId ||
+                    SelectedManufacturer?.Id != _originalManufacturerId ||
+                    SelectedSupplier?.Id != _originalSupplierId;
+
+                if (!hasChanges)
+                {
+                    MessageBox.Show(
+                        "Вы не внесли никаких изменений.",
+                        "Нет изменений",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                    return;
+                }
                 var dto = new UpdateProductDto
                 {
                     Id = Id,

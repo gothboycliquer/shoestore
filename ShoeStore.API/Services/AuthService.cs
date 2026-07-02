@@ -51,13 +51,22 @@ public class AuthService : IAuthService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var roleInEnglish = user.Role.Name switch
+            {
+                "Администратор" => "Admin",
+                "Менеджер" => "Manager",
+                "Клиент" => "Client",
+                "Гость" => "Guest",
+            };
+        
         var claims = new[]
-{
-    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-    new Claim(ClaimTypes.Name, user.Login),
-    new Claim("role", user.Role.Name.Trim()),
-    new Claim("FullName", user.FullName)
-};
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Login),
+                new Claim("role", roleInEnglish),
+                new Claim("roleRu", user.Role.Name),
+                new Claim("FullName", user.FullName)
+            };
 
         var token = new JwtSecurityToken(
             issuer: issuer,

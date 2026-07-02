@@ -127,12 +127,23 @@ public class OrderListViewModel : BaseViewModel
     }
 private void GoBack()
     {
-        _navigationService.ShowProductList();
+        var existingProductList = Application.Current.Windows
+            .OfType<Views.ProductListView>()
+            .FirstOrDefault();
+
+        if (existingProductList != null)
+        {
+            existingProductList.Show();
+        }
+        else
+        {
+            _navigationService.ShowProductList();
+        }
 
         foreach (Window window in Application.Current.Windows.OfType<Window>().ToList())
         {
             if (window is not Views.ProductListView)
-            window.Close();
+                window.Close();
         }
     }
 }

@@ -25,4 +25,10 @@ public class OrderRepository : Repository<Order>, IOrderRepository
                 .ThenInclude(oi => oi.Product)
             .FirstOrDefaultAsync(o => o.Id == id);
     }
+        public async Task DeleteOrderItemsAsync(int orderId)
+    {
+        var items = _context.OrderItems.Where(oi => oi.OrderId == orderId);
+        _context.OrderItems.RemoveRange(items);
+        await Task.CompletedTask;
+    }
 }

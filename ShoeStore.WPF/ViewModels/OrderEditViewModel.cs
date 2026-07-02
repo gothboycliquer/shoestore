@@ -19,6 +19,8 @@ public class OrderEditViewModel : BaseViewModel
     private bool _isEditMode;
     private ProductDto? _selectedProduct;
     private int _selectedQuantity = 1;
+    private string _originalStatus = string.Empty;
+    private List<OrderItemDto> _originalItems = new();
 
     public int Id
     {
@@ -91,6 +93,9 @@ public class OrderEditViewModel : BaseViewModel
 
             foreach (var item in order.OrderItems)
                 OrderItems.Add(item);
+
+            _originalStatus = order.Status;
+            _originalItems = order.OrderItems.ToList();
         }
         else
         {
@@ -151,6 +156,24 @@ public class OrderEditViewModel : BaseViewModel
         {
             MessageBox.Show("Добавьте хотя бы один товар в заказ.");
             return;
+        }
+
+        if (IsEditMode)
+        {
+            bool statusChanged = Status != _originalStatus;
+            bool itemsChanged = OrderItems.Count != _originalItems.Count ||
+                OrderItems.Any(i => !_originalItems.Any(o =>
+                    o.ProductId == i.ProductId && o.Quantity == i.Quantity));
+
+            if (!statusChanged && !itemsChanged)
+            {
+                MessageBox.Show(
+                    "Вы не внесли никаких изменений.",
+                    "Нет изменений",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return;
+            }
         }
 
         try

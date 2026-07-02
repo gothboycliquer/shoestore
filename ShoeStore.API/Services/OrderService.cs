@@ -46,7 +46,9 @@ public class OrderService : IOrderService
             return null;
 
         order.Status = dto.Status;
-        order.OrderItems.Clear();
+
+        await _unitOfWork.Orders.DeleteOrderItemsAsync(id);
+        await _unitOfWork.SaveChangesAsync();
 
         foreach (var itemDto in dto.OrderItems)
         {
@@ -55,6 +57,7 @@ public class OrderService : IOrderService
             {
                 order.OrderItems.Add(new ShoeStore.Data.OrderItem
                 {
+                    OrderId = id,
                     ProductId = itemDto.ProductId,
                     Quantity = itemDto.Quantity,
                     PriceAtPurchase = product.Price

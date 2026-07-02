@@ -8,7 +8,7 @@ namespace ShoeStore.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Policy = "ManagerOrAdmin")]
 public class OrdersController : ControllerBase
 {
     private readonly IOrderService _orderService;
@@ -36,7 +36,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<ApiResponse<OrderDto>>> Create([FromBody] CreateOrderDto dto)
     {
         var order = await _orderService.CreateAsync(dto);
@@ -45,7 +45,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<ApiResponse<OrderDto>>> Update(int id, [FromBody] CreateOrderDto dto)
     {
         var order = await _orderService.UpdateAsync(id, dto);
@@ -56,7 +56,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<ApiResponse<bool>>> Delete(int id)
     {
         var result = await _orderService.DeleteAsync(id);
