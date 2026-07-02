@@ -78,6 +78,8 @@ public class ProductListViewModel : BaseViewModel
     public RelayCommand EditProductCommand { get; }
     public AsyncRelayCommand DeleteProductCommand { get; }
     public RelayCommand ShowOrdersCommand { get; }
+    public RelayCommand SortByPriceAscCommand { get; }
+    public RelayCommand SortByPriceDescCommand { get; }
 
     public ProductListViewModel(IApiClient apiClient, ISessionService sessionService, INavigationService navigationService)
     {
@@ -95,6 +97,8 @@ public class ProductListViewModel : BaseViewModel
         EditProductCommand = new RelayCommand(p => EditProduct(p as ProductDto));
         DeleteProductCommand = new AsyncRelayCommand(p => DeleteProductAsync(p as ProductDto));
         ShowOrdersCommand = new RelayCommand(_ => ShowOrders());
+        SortByPriceAscCommand = new RelayCommand(_ => SortByPrice("Ascending"));
+        SortByPriceDescCommand = new RelayCommand(_ => SortByPrice("Descending"));
     }
 
     public async Task InitializeAsync()
@@ -174,6 +178,17 @@ public class ProductListViewModel : BaseViewModel
             : ListSortDirection.Descending;
 
         ProductsView.SortDescriptions.Add(new SortDescription("Quantity", sortDir));
+    }
+
+    private void SortByPrice(string direction)
+    {
+        ProductsView.SortDescriptions.Clear();
+
+        var sortDir = direction == "Ascending"
+            ? ListSortDirection.Ascending
+            : ListSortDirection.Descending;
+
+        ProductsView.SortDescriptions.Add(new SortDescription("Price", sortDir));
     }
 
     private async void AddProduct()
